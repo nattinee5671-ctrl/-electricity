@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <title>NEO727</title>
+    <!-- Google Font - Prompt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Prompt', sans-serif;
+            color: #212529;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(90deg, #0056b3, #007bff);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar a.navbar-brand,
+        .navbar .site-name,
+        .navbar a.btn-outline-light {
+            color: #fff !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .site-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .btn-custom {
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-outline-light {
+            color: #fff !important;
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-outline-light:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #f1f3f5;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="{{ url_for('select_system') }}">NEO727+</a>
+            <!-- ข้อความ Aspire Vibha-Victory -->
+            <div class="site-name ms-auto me-auto text-white fw-bold d-none d-lg-block">
+                Aspire Vibha-Victory
+            </div>
+            <!-- ปุ่ม hamburger -->
+            <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarIcons" aria-controls="navbarIcons" aria-expanded="false" aria-label="Toggle options">
+                <i class="bi bi-list"></i>
+            </button>
+            <!-- เมนู -->
+            <div class="collapse navbar-collapse justify-content-end" id="navbarIcons">
+                <!-- ปุ่มย้อนกลับ -->
+                <a href="javascript:void(0);" onclick="goBack()" class="btn btn-outline-light btn-custom me-2" title="ย้อนกลับ">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+
+                <!-- ปุ่ม หน้าแรก -->
+                <a href="{{ url_for('select_system') }}" class="btn btn-outline-light btn-custom me-2" title="หน้าแรก">
+                    หน้าแรก
+                </a>
+
+                <!-- ปุ่ม ประวัติการใช้งาน -->
+                <a href="{{ url_for('history') }}" class="btn btn-outline-light btn-custom" title="ประวัติการใช้งาน">
+                    <i class="bi bi-clock-history"></i> ประวัติ
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Container -->
+    <div class="container my-4">
+        {% block content %}
+        <!-- เนื้อหาจะแสดงตรงนี้ -->
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        © 2025 NEO727 · ระบบจัดการข้อมูลภายใน
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function goBack() {
+            if (document.referrer !== "") {
+                history.back();
+            } else {
+                window.location.href = "{{ url_for('select_system') }}";
+            }
+        }
+    </script>
+</body>
+</html>

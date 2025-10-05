@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <title>เข้าสู่ระบบ | NEO727</title>
+    <!-- Google Font - Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet" />
+    <style>
+        /* CSS เหมือนเดิม */
+        * { box-sizing: border-box; margin:0; padding:0; font-family:'Prompt',sans-serif; }
+        body { background-color:#f0f2f5; height:100vh; display:flex; justify-content:center; align-items:center; position:relative; overflow:hidden; }
+        body::before, body::after { content:''; position:absolute; border-radius:50%; background: radial-gradient(circle, rgba(0,150,255,0.2), rgba(100,150,255,0.2)); opacity:0.5; z-index:0; filter:blur(50px); animation: moveGradient 15s infinite alternate ease-in-out; }
+        body::before { width:500px; height:500px; top:-100px; left:-100px; }
+        body::after { width:600px; height:600px; bottom:-150px; right:-150px; background: radial-gradient(circle, rgba(255,150,0,0.2), rgba(255,50,0,0.2)); animation-delay:-7.5s; }
+        .login-container { background: rgba(255,255,255,0.5); backdrop-filter: blur(15px); border:1px solid rgba(255,255,255,0.5); padding:40px; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.1); width:100%; max-width:400px; text-align:center; color:#333; position:relative; z-index:1; transition: transform 0.3s ease; }
+        .login-container:hover { transform: translateY(-5px); }
+        .login-container h2 { margin-bottom:25px; font-weight:600; color:#333; }
+        form input[type="text"], form input[type="password"] { width:100%; padding:12px; margin:12px 0; border:none; border-radius:8px; font-size:16px; background:rgba(255,255,255,0.8); color:#333; transition: all 0.3s ease; outline:none; }
+        form input[type="text"]::placeholder, form input[type="password"]::placeholder { color: rgba(51,51,51,0.7); }
+        form input[type="text"]:focus, form input[type="password"]:focus { background:#fff; box-shadow:0 0 10px rgba(0,150,255,0.3); }
+        form button { width:100%; padding:12px; margin-top:10px; border:none; border-radius:8px; background: linear-gradient(45deg, #3a7bd5, #00d2ff); color:white; font-size:18px; font-weight:600; cursor:pointer; transition: all 0.3s ease; box-shadow:0 4px 15px rgba(0,150,255,0.3); }
+        form button:hover { background: linear-gradient(45deg, #00d2ff, #3a7bd5); transform: scale(1.05); box-shadow:0 8px 20px rgba(0,150,255,0.5); }
+        .site-name { font-size:14px; margin-top:30px; opacity:0.7; color:#333; }
+        @keyframes moveGradient { 0% { transform: translate(0,0); } 25% { transform: translate(100px,-50px); } 50% { transform: translate(0,100px); } 75% { transform: translate(-100px,-50px); } 100% { transform: translate(0,0); } }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>เข้าสู่ระบบ</h2>
+        <form method="POST" action="{{ url_for('login') }}">
+            <input type="text" name="username" placeholder="ชื่อผู้ใช้" required />
+            <input type="password" name="password" placeholder="รหัสผ่าน" required />
+            <input type="hidden" name="site_id" value="{{ site_id }}" />
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="site-name">© 2025 NEO727 | NEO 727+</div>
+    </div>
+</body>
+</html>

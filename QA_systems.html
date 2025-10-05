@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+
+{% block title %}หมวดงานส่งตรวจ QA ในห้องพัก{% endblock %}
+
+{% block content %}
+<style>
+    body { font-family: 'Arial', sans-serif; display: flex; flex-direction: column; background-color: #f0f0f0; }
+    .header {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+        box-shadow: 6px 6px 12px rgba(0,0,0,0.1), -6px -6px 12px rgba(255,255,255,0.7);
+        border-radius: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    .main-content {
+        flex-grow: 1;
+        padding: 20px;
+        position: relative;
+        background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+        border-radius: 15px;
+        box-shadow: 6px 6px 12px rgba(0,0,0,0.2), -6px -6px 12px rgba(255,255,255,0.7);
+        transition: all 0.3s ease;
+    }
+    .btn-group { margin-bottom: 20px; }
+    .btn-group label {
+        font-size: 1.2em;
+        font-weight: 500;
+        margin-right: 10px;
+    }
+    .btn-group select {
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(145deg, #e6e6e6, #ffffff);
+        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1), inset -2px -2px 5px rgba(255,255,255,0.7);
+        font-size: 1em;
+    }
+    .task-button {
+        padding: 12px 24px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(145deg, #f0f0f0, #dcdcdc);
+        box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -2px -2px 6px rgba(255, 255, 255, 0.6);
+        font-size: 1em;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    .task-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25), -3px -3px 8px rgba(255, 255, 255, 0.7);
+        background: linear-gradient(145deg, #e6f0ff, #d0e4ff);
+    }
+    .task-button.active {
+        background: linear-gradient(145deg, #007BFF, #0056b3);
+        color: white;
+        font-weight: bold;
+        box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.3), inset -3px -3px 6px rgba(255, 255, 255, 0.2);
+    }
+    .room-grid {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+        background: linear-gradient(145deg, #f0f0f0, #dcdcdc);
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: inset 2px 2px 4px rgba(0,0,0,0.1), inset -2px -2px 4px rgba(255,255,255,0.5);
+    }
+    .room-box {
+        width: 100%;
+        padding-top: 50%;
+        position: relative;
+        cursor: pointer;
+        border-radius: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        font-size: 1.4em;
+        background: linear-gradient(145deg, #f0f0f0, #dcdcdc);
+        box-shadow: 4px 4px 8px rgba(0,0,0,0.2), -4px -4px 8px rgba(255,255,255,0.6);
+        transition: all 0.3s ease;
+    }
+    .room-box.green { background: linear-gradient(145deg, #28a745, #1e7e34); color: white; }
+    .room-box.red { background: linear-gradient(145deg, #dc3545, #a71d2a); color: white; }
+    .room-box.gray { background: linear-gradient(145deg, #6c757d, #4e555b); color: white; }
+    .room-box.white { background: linear-gradient(145deg, #ffffff, #e0e0e0); color: black; }
+    .room-box:hover {
+        transform: translateY(-3px);
+        box-shadow: 6px 6px 12px rgba(0,0,0,0.25), -4px -4px 10px rgba(255,255,255,0.5);
+    }
+    .room-box span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .save-btn {
+        background: linear-gradient(145deg, #5888ba, #0056b3);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 500;
+        box-shadow: 4px 4px 8px rgba(0,0,0,0.2), -4px -4px 8px rgba(255,255,255,0.3);
+        transition: all 0.3s ease;
+        margin-top: 20px;
+    }
+    .save-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 6px 6px 12px rgba(0,0,0,0.25), -4px -4px 10px rgba(255,255,255,0.4);
+        background: linear-gradient(145deg, #0056b3, #003f7f);
+    }
+    .legend {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.9em;
+    }
+    .color-box {
+        width: 15px;
+        height: 15px;
+        border: 1px solid #ccc;
+    }
+    .color-box.red { background-color: #dc3545; }
+    .color-box.green { background-color: #28a745; }
+    .color-box.gray { background-color: #6c757d; }
+
+    /* Note Boxes */
+    .notes-container { margin-top: 20px; }
+    .note-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        background: linear-gradient(145deg, #e6e6e6, #ffffff);
+        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1), inset -2px -2px 5px rgba(255,255,255,0.7);
+    }
+    .note-box label { font-weight: bold; display: block; margin-bottom: 5px; }
+    .note-box textarea {
+        width: 100%;
+        height: 80px;
+        padding: 8px;
+        border-radius: 5px;
+        border: none;
+        background: #f9f9f9;
+        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1), inset -2px -2px 5px rgba(255,255,255,0.7);
+    }
+    .success-message {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        text-align: center;
+    }
+    .success-message.show { opacity: 1; visibility: visible; }
+</style>
+
+<div class="header">
+    <button class="task-button" onclick="selectSection('ส่งตรวจ CM')">1. ส่งตรวจ CM</button>
+    <button class="task-button active" onclick="selectSection('ส่งตรวจ QA1')">2. ส่งตรวจ QA1</button>
+    <button class="task-button" onclick="selectSection('ส่งตรวจ QA PASS')">3. ส่งตรวจ QA PASS</button>
+</div>
+
+<div class="main-content">
+    <div id="success-message" class="success-message">บันทึกข้อมูลแล้ว!</div>
+    <h2>หมวดงานส่งตรวจ QA ในห้องพัก</h2>
+
+    <div class="btn-group">
+        <label for="floor-select">เลือกชั้น:</label>
+        <select id="floor-select" onchange="selectFloor(this.value)">
+            {% for i in range(1, 30) %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div id="room-container"></div>
+    <div id="notes-container" class="notes-container"></div>
+    <button class="save-btn" onclick="saveData()">บันทึก</button>
+
+    <div class="legend">
+        <div class="legend-item"><div class="color-box red"></div><span>ไม่ผ่าน</span></div>
+        <div class="legend-item"><div class="color-box green"></div><span>ผ่าน</span></div>
+        <div class="legend-item"><div class="color-box gray"></div><span>แก้ไขแล้ว</span></div>
+    </div>
+</div>
+
+<script>
+    const container = document.getElementById('room-container');
+    const notesContainer = document.getElementById('notes-container');
+    let selectedSection = 'ส่งตรวจ QA1';
+    let selectedFloor = 1;
+    let roomNotes = {};
+
+    const colors = ['white', 'green', 'red', 'gray'];
+
+    function getStorageKey() {
+        return `qa_notes_${selectedSection}_floor_${selectedFloor}`;
+    }
+
+    function loadNotes() {
+        const saved = localStorage.getItem(getStorageKey());
+        roomNotes = saved ? JSON.parse(saved) : {};
+    }
+
+    function saveNotes() {
+        localStorage.setItem(getStorageKey(), JSON.stringify(roomNotes));
+    }
+
+    function renderRoomGrid() {
+        container.innerHTML = '';
+        notesContainer.innerHTML = '';
+        loadNotes();
+        const grid = document.createElement('div');
+        grid.className = 'room-grid';
+        for (let i = 1; i <= 30; i++) {
+            const status = roomNotes[i]?.status || 'white';
+            const box = document.createElement('div');
+            box.className = `room-box ${status}`;
+            box.innerHTML = `<span>${i}</span>`;
+            box.dataset.roomNumber = i;
+            box.onclick = function() { toggleColor(this); };
+            grid.appendChild(box);
+            if (status === 'red') createNoteBox(i);
+        }
+        container.appendChild(grid);
+    }
+
+    function toggleColor(el) {
+        const num = el.dataset.roomNumber;
+        const current = el.classList[1];
+        const next = colors[(colors.indexOf(current) + 1) % colors.length];
+        el.className = 'room-box ' + next;
+        roomNotes[num] = roomNotes[num] || {};
+        roomNotes[num].status = next;
+        if (next === 'red') createNoteBox(num); else removeNoteBox(num);
+        saveNotes();
+    }
+
+    function createNoteBox(num) {
+        if (document.getElementById(`note-${num}`)) return;
+        const div = document.createElement('div');
+        div.className = 'note-box';
+        div.id = `note-${num}`;
+        div.innerHTML = `<label>ห้อง ${num}:</label><textarea placeholder="กรอกรายละเอียดข้อบกพร่อง...'">${roomNotes[num]?.note || ''}</textarea>`;
+        div.querySelector('textarea').oninput = e => {
+            roomNotes[num].note = e.target.value;
+            saveNotes();
+        };
+        notesContainer.appendChild(div);
+    }
+
+    function removeNoteBox(num) {
+        const box = document.getElementById(`note-${num}`);
+        if (box) box.remove();
+    }
+
+    function selectSection(sec) {
+        selectedSection = sec;
+        document.querySelectorAll('.task-button').forEach(b => b.classList.remove('active'));
+        document.querySelector(`.task-button[onclick="selectSection('${sec}')"]`).classList.add('active');
+        renderRoomGrid();
+    }
+
+    function selectFloor(f) {
+        selectedFloor = f;
+        renderRoomGrid();
+    }
+
+    function saveData() {
+        showSuccessMessage();
+    }
+
+    function showSuccessMessage() {
+        const msg = document.getElementById('success-message');
+        msg.classList.add('show');
+        setTimeout(() => msg.classList.remove('show'), 3000);
+    }
+
+    window.onload = () => selectFloor(1);
+</script>
+{% endblock %}
